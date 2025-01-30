@@ -8,7 +8,7 @@ Este repositorio contiene las consultas SQL necesarias para crear el modelo dime
 
 ## Creación de Tablas
 
-###  Tabla de Tiempo 
+Tabla de Tiempo 
 ```
 CREATE TABLE dim_tiempo (
     time_id SERIAL PRIMARY KEY,
@@ -20,7 +20,7 @@ CREATE TABLE dim_tiempo (
     hour INT NOT NULL
 );
 ```
-###TABLA UBICACIONES
+Tabla ubicaciones
 ```
 CREATE TABLE dim_ubicaciones (
     location_id SERIAL PRIMARY KEY,
@@ -28,7 +28,7 @@ CREATE TABLE dim_ubicaciones (
     dropoff_location_id INT NOT NULL
 );
 ```
-###TABLA BASES OPERATIVAS
+Tabla bases operativas
 ```
 CREATE TABLE dim_bases (
     base_id SERIAL PRIMARY KEY,
@@ -38,7 +38,7 @@ CREATE TABLE dim_bases (
 );
 
 ```
-###TABLA VEHICULOS
+Tabla Vehiculos
 ```
 CREATE TABLE dim_vehiculos (
     vehicle_id SERIAL PRIMARY KEY,
@@ -47,7 +47,7 @@ CREATE TABLE dim_vehiculos (
     originating_base_num VARCHAR(50)
 );
 ```
-###TABLA HECHOS DE VIAJE
+Tabla hechos de viaje
 ```
 CREATE TABLE fact_viajes (
     trip_id SERIAL PRIMARY KEY,
@@ -61,7 +61,7 @@ CREATE TABLE fact_viajes (
     trip_time INT
 );
 ```
-###TABLA HECHOS DE INGRESO
+Tabla hechos ingreso
 ```
 CREATE TABLE fact_ingresos (
     revenue_id SERIAL PRIMARY KEY,
@@ -78,7 +78,7 @@ CREATE TABLE fact_ingresos (
 ```
 ##  Consultas SQL 
 
-### Cantidad de viajes por día
+ Cantidad de viajes por día
 ```
 SELECT DATE(pickup_datetime) AS fecha, COUNT(*) AS cantidad_viajes
 FROM fact_viajes
