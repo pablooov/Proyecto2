@@ -2,7 +2,7 @@
 
 #  Modelo Dimensional de Datos de Viajes 
 
-Este repositorio contiene las consultas SQL necesarias para crear el modelo dimensional basado en los datos de viajes.
+Este repositorio contiene las consultas SQL necesarias para crear el modelo dimensional basado en los datos de viajes. Ademas y código Python para analizar un dataset de viajes.
 
 ---
 
@@ -115,6 +115,7 @@ LIMIT 10;
 ```
 Consulta Top 5 de horas con más ingresos
 ```
+
 SELECT EXTRACT(HOUR FROM pickup_datetime) AS hora, 
        SUM(base_passenger_fare + tolls + sales_tax + 
            congestion_surcharge + airport_fee + tips + driver_pay) AS ingresos_totales
@@ -124,3 +125,60 @@ GROUP BY hora
 ORDER BY ingresos_totales DESC
 LIMIT 5;
 
+
+```
+Código Python para Análisis de Datos
+```
+import pyarrow.parquet as pq
+import pandas as pd
+
+# Configurar Pandas para mostrar todas las columnas sin truncar
+pd.set_option('display.max_columns', None)
+pd.set_option('display.max_colwidth', None)
+
+# Ruta del archivo Parquet
+archivo_parquet = "fhvhv_tripdata_2022-01.parquet"
+
+# Leer el archivo Parquet
+print("Cargando archivo Parquet...")
+tabla = pq.read_table(archivo_parquet)
+
+# Convertir a DataFrame de Pandas
+df = tabla.to_pandas()
+print(f" Archivo cargado correctamente con {df.shape[0]} registros y {df.shape[1]} columnas.\n")
+
+# Mostrar los primeros 5 registros
+print("Primeros 5 registros del archivo:")
+print(df.head(), "\n")
+
+# Contar el número de registros
+num_registros = df.shape[0]
+print(f" El archivo Parquet tiene {num_registros} registros.\n")
+
+# Mostrar solo el primer registro con formato completo
+print("Primer registro del archivo:")
+print(df.head(1), "\n")
+
+# Contar valores nulos por columna
+valores_nulos = df.isnull().sum()
+columnas_con_nulos = valores_nulos[valores_nulos > 0]
+
+# Verificar si hay columnas con valores nulos
+if columnas_con_nulos.empty:
+    print(" No hay columnas con valores nulos.\n")
+else:
+    print(" Columnas con valores nulos:")
+    print(columnas_con_nulos, "\n")
+
+# Verificar y Mostrar algunos registros con valores nulos
+filas_nulas = df[df.isnull().any(axis=1)]
+
+if filas_nulas.empty:
+    print(" No hay registros con valores nulos.\n")
+else:
+    print(" Ejemplo de registros con valores nulos:")
+    print(filas_nulas.head(), "\n")
+
+# Eliminar registros con valores nulos
+df_limpio = df.dropna()
+print(f" Filas antes: {len(df)}, después de eliminar nulos: {len(df_limpio)}\n")
